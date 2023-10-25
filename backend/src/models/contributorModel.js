@@ -28,6 +28,13 @@ const Contributor = sequelize.define(
         key: "id",
       },
     },
+    pay_interval_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "intervals",
+        key: "id",
+      },
+    },
   },
   {
     timestamps: false,
@@ -40,6 +47,14 @@ Budget.hasMany(Contributor, {
 
 Contributor.belongsTo(Budget, {
   foreignKey: "budget_id",
+});
+
+Contributor.hasOne(Interval, {
+  foreignKey: "pay_interval_id",
+});
+
+PayDay.belongsTo(Interval, {
+  foreignKey: "pay_interval_id",
 });
 
 Contributor.sync({ force: false });
