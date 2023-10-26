@@ -58,5 +58,6 @@ PayDay.belongsTo(Interval, {
 });
 
 Contributor.sync({ force: false });
+sequelize.sync();
 
 module.exports = Contributor;
