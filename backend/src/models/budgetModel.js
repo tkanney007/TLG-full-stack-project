@@ -22,7 +22,15 @@ const Budget = sequelize.define(
       },
     },
   },
-  { sequelize, timestamps: true }
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["budget_name", "user_id"],
+      },
+    ],
+  },
+  { sequelize, timestamps: false }
 );
 
 User.hasMany(Budget, {

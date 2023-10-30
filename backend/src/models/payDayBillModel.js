@@ -40,6 +40,7 @@ const PayDayBill = sequelize.define(
 
 Bill.hasMany(PayDayBill, {
   foreignKey: "bill_id",
+  onDelete: "CASCADE",
 });
 
 PayDayBill.belongsTo(Bill, {
@@ -48,6 +49,7 @@ PayDayBill.belongsTo(Bill, {
 
 PayDay.hasMany(PayDayBill, {
   foreignKey: "payday_id",
+  onDelete: "CASCADE",
 });
 
 PayDayBill.belongsTo(PayDay, {
@@ -64,4 +66,4 @@ PayDayBill.belongsTo(Contributor, {
 
 PayDayBill.sync({ force: false });
 
-module.exports = Bill;
+module.exports = PayDayBill;
