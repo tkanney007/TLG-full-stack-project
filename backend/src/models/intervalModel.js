@@ -16,6 +16,10 @@ const Interval = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    num_days: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     timestamps: false,
