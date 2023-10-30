@@ -22,7 +22,15 @@ const Bill = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+    day_due: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     start_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    end_date: {
       type: DataTypes.DATE,
       allowNull: false,
     },
@@ -54,12 +62,21 @@ const Bill = sequelize.define(
     },
   },
   {
+    indexes: [
+      {
+        unique: true,
+        fields: ["bill_name", "budget_id"],
+      },
+    ],
+  },
+  {
     timestamps: false,
   }
 );
 
 Budget.hasMany(Bill, {
   foreignKey: "budget_id",
+  onDelete: "CASCADE",
 });
 
 Bill.belongsTo(Budget, {

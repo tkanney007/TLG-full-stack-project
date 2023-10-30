@@ -1,7 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { loginUser } = require("../controllers/loginController");
+const {
+  getBudgetsByUserID,
+  addBudget,
+  updateBudget,
+  deleteBudget,
+} = require("../controllers/budgetController");
 
-router.post("/", getAllBudgets);
+router.get("/", getBudgetsByUserID);
+router.post("/", addBudget);
+router.put("/", updateBudget);
+router.delete("/", deleteBudget);
 
 module.exports = router;

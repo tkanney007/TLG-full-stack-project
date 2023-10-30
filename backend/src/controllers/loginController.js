@@ -1,20 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const budgetModel = require("../models/budgetModel");
 const userModel = require("../models/userModel");
 const Budget = require("../models/budgetModel");
 
-const secretKey = "asdfasdfxfvsdfasdgffsdfgsfa";
-
 const loginUser = async (req, res) => {
   try {
-    let token = jwt.verify(req.body.token, secretKey, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(401).json({ message: "Unauthorized" });
-        return;
-      }
-    });
     const loginResult = await userModel.findOne({
       where: { email: req.body.email },
       attributes: ["id", "first_name", "email", "password"],
