@@ -3,7 +3,12 @@ const Interval = require("../models/intervalModel");
 const getIntervals = async (req, res) => {
   try {
     const result = await Interval.findAll({
-      attributes: [["id", "interval_id"], "interval_name", "description"],
+      attributes: [
+        ["id", "interval_id"],
+        "interval_name",
+        "description",
+        "num_days",
+      ],
     });
     if (result) {
       return res.status(200).json(result);
