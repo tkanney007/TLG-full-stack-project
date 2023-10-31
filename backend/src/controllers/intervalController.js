@@ -8,6 +8,7 @@ const getIntervals = async (req, res) => {
         "interval_name",
         "description",
         "num_days",
+        "num_pays",
       ],
     });
     if (result) {

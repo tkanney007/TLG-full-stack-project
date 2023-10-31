@@ -1,4 +1,5 @@
 const { sequelize } = require("./conn");
+const { DataTypes } = require("sequelize");
 const Contributor = require("./contributorModel");
 const Interval = require("./intervalModel");
 const Budget = require("./budgetModel");
@@ -16,13 +17,13 @@ const PayCheck = sequelize.define(
       allowNull: false,
     },
     start_pay_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    end_pay_date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
+    // end_pay_date: {
+    //   type: DataTypes.DATE,
+    //   allowNull: false,
+    // },
     budget_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -84,6 +85,6 @@ PayCheck.belongsTo(Interval, {
   foreignKey: "interval_id",
 });
 
-PayCheck.sync({ force: false });
+PayCheck.sync({ alter: true });
 
 module.exports = PayCheck;

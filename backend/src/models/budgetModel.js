@@ -41,7 +41,6 @@ Budget.belongsTo(User, {
   foreignKey: "user_id",
 });
 
-sequelize.sync();
-Budget.sync({ force: false });
+Budget.sync({ alter: true });
 
 module.exports = Budget;

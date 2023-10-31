@@ -1,4 +1,5 @@
 const { sequelize } = require("./conn");
+const { DataTypes } = require("sequelize");
 const Bill = require("./billModel");
 const PayDay = require("./payDayModel");
 const Contributor = require("./contributorModel");
@@ -64,6 +65,6 @@ PayDayBill.belongsTo(Contributor, {
   foreignKey: "contributor_id",
 });
 
-PayDayBill.sync({ force: false });
+PayDayBill.sync({ alter: true });
 
 module.exports = PayDayBill;
