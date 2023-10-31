@@ -32,7 +32,7 @@ export default function DefaultForm() {
         </div>
         <TextInput
           id="password1"
-          placeholder="TOPSECRET"
+          placeholder="TOP SECRET"
           required
           type="password"
         />
