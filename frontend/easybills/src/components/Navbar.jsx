@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Navbar } from "flowbite-react";
+import  Navbar  from "flowbite-react";
+import logo from './assets/logo.jpg';
+
 
 ("use client");
 
-export default function DefaultNavbar() {
+import { Button, Navbar } from "flowbite-react";
+
+export default function NavbarWithCTAButton() {
   return (
     <Navbar fluid rounded>
-      <Navbar.Brand as={Link} href="https://flowbite-react.com">
-        <img
-          src="/favicon.svg"
-          className="mr-3 h-6 sm:h-9"
-          alt="Flowbite React Logo"
-        />
+      <Navbar.Brand href="https://flowbite-react.com">
+        <img src={logo} className="mr-3 h-6 sm:h-9" alt="Logo" />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Flowbite React
+          Easy Bills
         </span>
       </Navbar.Brand>
-      <Navbar.Toggle />
+      <div className="flex md:order-2">
+        <Button gradientDuoTone="purpleToBlue">log in</Button>
+      </div>
       <Navbar.Collapse>
         <Navbar.Link href="#" active>
           Home
         </Navbar.Link>
-        <Navbar.Link as={Link} href="#">
-          About
-        </Navbar.Link>
-        <Navbar.Link href="#">Services</Navbar.Link>
-        <Navbar.Link href="#">Pricing</Navbar.Link>
-        <Navbar.Link href="#">Contact</Navbar.Link>
+        <Navbar.Link href="#">Payday</Navbar.Link>
+        <Navbar.Link href="#">Bills</Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );
