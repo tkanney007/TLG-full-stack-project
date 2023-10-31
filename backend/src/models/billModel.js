@@ -1,4 +1,5 @@
 const Budget = require("./userModel");
+const { DataTypes } = require("sequelize");
 const { sequelize } = require("./conn");
 const Interval = require("./intervalModel");
 
@@ -27,11 +28,11 @@ const Bill = sequelize.define(
       allowNull: false,
     },
     start_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     end_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     website: {
@@ -91,6 +92,6 @@ Bill.belongsTo(Interval, {
   foreignKey: "interval_id",
 });
 
-Bill.sync({ force: false });
+Bill.sync({ alter: true });
 
 module.exports = Bill;

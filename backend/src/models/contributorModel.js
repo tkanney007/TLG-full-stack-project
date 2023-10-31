@@ -1,5 +1,6 @@
 const Budget = require("./budgetModel");
 const { sequelize } = require("./conn");
+const { DataTypes } = require("sequelize");
 
 const Contributor = sequelize.define(
   "contributor",
@@ -51,7 +52,6 @@ Contributor.belongsTo(Budget, {
   foreignKey: "budget_id",
 });
 
-Contributor.sync({ force: false });
-sequelize.sync();
+Contributor.sync({ alter: true });
 
 module.exports = Contributor;
