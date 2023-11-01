@@ -1,7 +1,16 @@
 import React from "react";
 
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Pagination from "../components/Pagination";
+import CustomNavbar from "../components/Navbar";
+import FooterCustom from "../components/Footer";
+
+const Home = () => {
+  return (
+    <div>
+      <CustomNavbar />
+      This is the home page.
+      <FooterCustom />
+    </div>
+  );
+};
 
 export default Home;

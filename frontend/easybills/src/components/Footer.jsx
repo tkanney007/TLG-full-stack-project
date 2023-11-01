@@ -8,7 +8,7 @@ import {
   BsTwitter,
 } from "react-icons/bs";
 
-export default function FooterWithSocialMediaIcons() {
+export default function FooterCustom() {
   return (
     <Footer container>
       <div className="w-full">
