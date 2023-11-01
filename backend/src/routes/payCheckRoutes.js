@@ -5,7 +5,7 @@ const {
   addPayCheck,
   updatePayCheck,
   deletePayCheck,
-} = require("../controllers/contributorController");
+} = require("../controllers/payCheckController");
 
 router.get("/", getPayCheckByContribID);
 router.post("/", addPayCheck);

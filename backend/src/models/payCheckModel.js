@@ -70,7 +70,7 @@ PayCheck.belongsTo(Contributor, {
 
 Budget.hasMany(PayCheck, {
   foreignKey: "budget_id",
-  onDelete: "CASCADE",
+  //onDelete: "CASCADE",
 });
 
 PayCheck.belongsTo(Budget, {

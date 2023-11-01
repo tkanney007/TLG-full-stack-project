@@ -61,7 +61,7 @@ const PayDay = sequelize.define(
 
 Contributor.hasMany(PayDay, {
   foreignKey: "contributor_id",
-  onDelete: "CASCADE",
+  //onDelete: "CASCADE",
 });
 
 PayDay.belongsTo(Contributor, {
@@ -70,7 +70,7 @@ PayDay.belongsTo(Contributor, {
 
 Budget.hasMany(PayDay, {
   foreignKey: "budget_id",
-  onDelete: "CASCADE",
+  //onDelete: "CASCADE",
 });
 
 PayDay.belongsTo(Budget, {

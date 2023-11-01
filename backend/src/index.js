@@ -8,6 +8,8 @@ const loginRoutes = require("./routes/loginRoutes");
 const registerRoutes = require("./routes/registerRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
 const contributorRoutes = require("./routes/contributorRoutes");
+const payCheckRoutes = require("./routes/payCheckRoutes");
+const billRoutes = require("./routes/billRoutes");
 const secretKey = "asdfasdfxfvsdfasdgffsdfgsfa";
 
 app.use(cors());
@@ -30,6 +32,8 @@ app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
 app.use("/budgets", budgetRoutes);
 app.use("/contributors", contributorRoutes);
+app.use("/paychecks", payCheckRoutes);
+app.use("/bills", billRoutes);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}...`);

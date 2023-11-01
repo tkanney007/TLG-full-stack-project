@@ -3,9 +3,10 @@ const { DataTypes } = require("sequelize");
 const Bill = require("./billModel");
 const PayDay = require("./payDayModel");
 const Contributor = require("./contributorModel");
+const Budget = require("./budgetModel");
 
 const PayDayBill = sequelize.define(
-  "paydaybill",
+  "pay_day_bill",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -26,6 +27,13 @@ const PayDayBill = sequelize.define(
         key: "id",
       },
     },
+    budget_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "budgets",
+        key: "id",
+      },
+    },
     contributor_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -33,6 +41,14 @@ const PayDayBill = sequelize.define(
         key: "id",
       },
     },
+  },
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["bill_id", "paycheck_id"],
+      },
+    ],
   },
   {
     timestamps: false,
@@ -63,6 +79,14 @@ Contributor.hasMany(PayDayBill, {
 
 PayDayBill.belongsTo(Contributor, {
   foreignKey: "contributor_id",
+});
+
+Budget.hasMany(PayDayBill, {
+  foreignKey: "budget_id",
+});
+
+PayDayBill.belongsTo(Budget, {
+  foreignKey: "budget_id",
 });
 
 PayDayBill.sync({ alter: true });
