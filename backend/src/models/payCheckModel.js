@@ -3,20 +3,27 @@ const { DataTypes } = require("sequelize");
 const Contributor = require("./contributorModel");
 const Interval = require("./intervalModel");
 const Budget = require("./budgetModel");
-const PayCheck = require("./payCheckModel");
 
-const PayDay = sequelize.define(
-  "payday",
+const PayCheck = sequelize.define(
+  "paycheck",
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    pay_date: {
+    pay_check_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    start_pay_date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
+    // end_pay_date: {
+    //   type: DataTypes.DATE,
+    //   allowNull: false,
+    // },
     budget_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -31,26 +38,19 @@ const PayDay = sequelize.define(
         key: "id",
       },
     },
-    paycheck_id: {
+    interval_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: "paychecks",
+        model: "intervals",
         key: "id",
       },
     },
-    // interval_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: "intervals",
-    //     key: "id",
-    //   },
-    // },
   },
   {
     indexes: [
       {
         unique: true,
-        fields: ["pay_date", "paycheck_id"],
+        fields: ["pay_check_name", "budget_id", "contributor_id"],
       },
     ],
   },
@@ -59,41 +59,32 @@ const PayDay = sequelize.define(
   }
 );
 
-Contributor.hasMany(PayDay, {
+Contributor.hasMany(PayCheck, {
   foreignKey: "contributor_id",
-  //onDelete: "CASCADE",
-});
-
-PayDay.belongsTo(Contributor, {
-  foreignKey: "contributor_id",
-});
-
-Budget.hasMany(PayDay, {
-  foreignKey: "budget_id",
-  //onDelete: "CASCADE",
-});
-
-PayDay.belongsTo(Budget, {
-  foreignKey: "budget_id",
-});
-
-PayCheck.hasMany(PayDay, {
-  foreignKey: "paycheck_id",
   onDelete: "CASCADE",
 });
 
-PayDay.belongsTo(PayCheck, {
-  foreignKey: "paycheck_id",
+PayCheck.belongsTo(Contributor, {
+  foreignKey: "contributor_id",
 });
 
-// PayDay.hasOne(Interval, {
-//   foreignKey: "interval_id",
-// });
+Budget.hasMany(PayCheck, {
+  foreignKey: "budget_id",
+  //onDelete: "CASCADE",
+});
 
-// PayDay.belongsTo(Interval, {
-//   foreignKey: "interval_id",
-// });
+PayCheck.belongsTo(Budget, {
+  foreignKey: "budget_id",
+});
 
-PayDay.sync({ alter: true });
+PayCheck.hasOne(Interval, {
+  foreignKey: "interval_id",
+});
 
-module.exports = PayDay;
+PayCheck.belongsTo(Interval, {
+  foreignKey: "interval_id",
+});
+
+PayCheck.sync({ alter: true });
+
+module.exports = PayCheck;

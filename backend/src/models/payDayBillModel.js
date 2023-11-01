@@ -1,10 +1,12 @@
 const { sequelize } = require("./conn");
+const { DataTypes } = require("sequelize");
 const Bill = require("./billModel");
 const PayDay = require("./payDayModel");
 const Contributor = require("./contributorModel");
+const Budget = require("./budgetModel");
 
 const PayDayBill = sequelize.define(
-  "paydaybill",
+  "pay_day_bill",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -25,6 +27,13 @@ const PayDayBill = sequelize.define(
         key: "id",
       },
     },
+    budget_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "budgets",
+        key: "id",
+      },
+    },
     contributor_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -34,12 +43,21 @@ const PayDayBill = sequelize.define(
     },
   },
   {
+    indexes: [
+      {
+        unique: true,
+        fields: ["bill_id", "paycheck_id"],
+      },
+    ],
+  },
+  {
     timestamps: false,
   }
 );
 
 Bill.hasMany(PayDayBill, {
   foreignKey: "bill_id",
+  onDelete: "CASCADE",
 });
 
 PayDayBill.belongsTo(Bill, {
@@ -48,6 +66,7 @@ PayDayBill.belongsTo(Bill, {
 
 PayDay.hasMany(PayDayBill, {
   foreignKey: "payday_id",
+  onDelete: "CASCADE",
 });
 
 PayDayBill.belongsTo(PayDay, {
@@ -62,6 +81,14 @@ PayDayBill.belongsTo(Contributor, {
   foreignKey: "contributor_id",
 });
 
-PayDayBill.sync({ force: false });
+Budget.hasMany(PayDayBill, {
+  foreignKey: "budget_id",
+});
 
-module.exports = Bill;
+PayDayBill.belongsTo(Budget, {
+  foreignKey: "budget_id",
+});
+
+PayDayBill.sync({ alter: true });
+
+module.exports = PayDayBill;

@@ -22,7 +22,15 @@ const Budget = sequelize.define(
       },
     },
   },
-  { sequelize, timestamps: true }
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["budget_name", "user_id"],
+      },
+    ],
+  },
+  { sequelize, timestamps: false }
 );
 
 User.hasMany(Budget, {
@@ -33,7 +41,6 @@ Budget.belongsTo(User, {
   foreignKey: "user_id",
 });
 
-sequelize.sync();
-Budget.sync({ force: false });
+Budget.sync({ alter: true });
 
 module.exports = Budget;

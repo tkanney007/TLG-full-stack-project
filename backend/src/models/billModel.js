@@ -1,5 +1,6 @@
-const Budget = require("./userModel");
+const { DataTypes } = require("sequelize");
 const { sequelize } = require("./conn");
+const Budget = require("./budgetModel");
 const Interval = require("./intervalModel");
 
 const Bill = sequelize.define(
@@ -22,10 +23,22 @@ const Bill = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    start_date: {
-      type: DataTypes.DATE,
+    day_due: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
+    monthly_same_day: {
+      type: DataTypes.BIT,
+      allowNull: false,
+    },
+    start_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    // end_date: {
+    //   type: DataTypes.DATEONLY,
+    //   allowNull: false,
+    // },
     website: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -54,12 +67,21 @@ const Bill = sequelize.define(
     },
   },
   {
+    indexes: [
+      {
+        unique: true,
+        fields: ["bill_name", "budget_id"],
+      },
+    ],
+  },
+  {
     timestamps: false,
   }
 );
 
 Budget.hasMany(Bill, {
   foreignKey: "budget_id",
+  onDelete: "CASCADE",
 });
 
 Bill.belongsTo(Budget, {
@@ -74,6 +96,6 @@ Bill.belongsTo(Interval, {
   foreignKey: "interval_id",
 });
 
-Bill.sync({ force: false });
+Bill.sync({ alter: true });
 
 module.exports = Bill;

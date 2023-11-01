@@ -1,5 +1,6 @@
-const Budget = require("./budgetModel");
 const { sequelize } = require("./conn");
+const { DataTypes } = require("sequelize");
+const Budget = require("./budgetModel");
 
 const Contributor = sequelize.define(
   "contributor",
@@ -28,13 +29,14 @@ const Contributor = sequelize.define(
         key: "id",
       },
     },
-    pay_interval_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "intervals",
-        key: "id",
+  },
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["contributor_name", "budget_id"],
       },
-    },
+    ],
   },
   {
     timestamps: false,
@@ -43,21 +45,13 @@ const Contributor = sequelize.define(
 
 Budget.hasMany(Contributor, {
   foreignKey: "budget_id",
+  onDelete: "CASCADE",
 });
 
 Contributor.belongsTo(Budget, {
   foreignKey: "budget_id",
 });
 
-Contributor.hasOne(Interval, {
-  foreignKey: "pay_interval_id",
-});
-
-PayDay.belongsTo(Interval, {
-  foreignKey: "pay_interval_id",
-});
-
-Contributor.sync({ force: false });
-sequelize.sync();
+Contributor.sync({ alter: true });
 
 module.exports = Contributor;

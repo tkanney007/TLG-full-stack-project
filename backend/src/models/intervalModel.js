@@ -1,4 +1,5 @@
 const { sequelize } = require("./conn");
+const { DataTypes } = require("sequelize");
 
 const Interval = sequelize.define(
   "interval",
@@ -16,10 +17,19 @@ const Interval = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    num_days: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    num_pays: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     timestamps: false,
   }
 );
 
+Interval.sync({ alter: true });
 module.exports = Interval;
