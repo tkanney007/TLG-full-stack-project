@@ -67,7 +67,8 @@ const updateContributor = async (req, res) => {
         },
         { where: { id: req.body.contributor_id } }
       );
-      return res.status(200).json(result);
+      const updatedResult = await Contributor.findByPk(req.body.contributor_id);
+      return res.status(200).json(updatedResult);
     }
     return res
       .status(204)
@@ -87,6 +88,10 @@ const deleteContributor = async (req, res) => {
         result,
       });
     }
+    return res.status(204).json({
+      message:
+        "Couldn't delete contributor record because it could not be found.",
+    });
   } catch (error) {
     res.status(500).json({ error: error });
   }

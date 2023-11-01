@@ -1,6 +1,6 @@
-const Budget = require("./budgetModel");
 const { sequelize } = require("./conn");
 const { DataTypes } = require("sequelize");
+const Budget = require("./budgetModel");
 
 const Contributor = sequelize.define(
   "contributor",

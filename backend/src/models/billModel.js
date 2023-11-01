@@ -1,6 +1,6 @@
-const Budget = require("./userModel");
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("./conn");
+const Budget = require("./budgetModel");
 const Interval = require("./intervalModel");
 
 const Bill = sequelize.define(
@@ -27,14 +27,18 @@ const Bill = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    monthly_same_day: {
+      type: DataTypes.BIT,
+      allowNull: false,
+    },
     start_date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    end_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
+    // end_date: {
+    //   type: DataTypes.DATEONLY,
+    //   allowNull: false,
+    // },
     website: {
       type: DataTypes.STRING,
       allowNull: true,
