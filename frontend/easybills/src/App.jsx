@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import CustomNavbar from "./components/Navbar";
 import FooterCustom from "./components/Footer";
 import Bills from "./pages/Bills";
+import Register from "./pages/Register";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Routes>
       <Route path='/' element={<Home/>} />
       <Route path='/login' element={<Login/>}/>
+      <Route path='/register' element={<Register/>}/>
       <Route path='/bills' element={<Bills/>}/>
       </Routes>
       <FooterCustom />
