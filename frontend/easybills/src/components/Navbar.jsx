@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function CustomNavbar() {
   return (
-    <Navbar fluid rounded>
+    <Navbar fluid rounded style={{ backgroundColor: '#141d46' }}>
       <Navbar.Brand >
       <Link to="/">
         <img src={logo} style={{ width: '75px' }} className="mr-3 h-6 sm:h-9" alt="Logo" /></Link>
