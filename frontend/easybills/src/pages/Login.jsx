@@ -1,12 +1,6 @@
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-
-
-'use client';
-
 import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
 
-export default function DefaultForm() {
+export default function Login() {
   return (
     <form className="flex max-w-md flex-col gap-4">
       <div>
