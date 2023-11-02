@@ -8,9 +8,17 @@ import {
   BsTwitter,
 } from "react-icons/bs";
 
+const footerStyle = {
+  backgroundColor: "#141d46",
+  width: "100%",
+  position: "absolute",
+  bottom: 0,
+};
+
 export default function FooterCustom() {
   return (
-    <Footer container>
+    <div style={{ position: "relative", minHeight: "100vh" }}>
+    <Footer container style={footerStyle}>
       <div className="w-full">
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div>
@@ -57,6 +65,7 @@ export default function FooterCustom() {
           </div>
         </div>
       </div>
-    </Footer>
+      </Footer>
+    </div>
   );
 }
