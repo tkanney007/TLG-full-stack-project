@@ -9,14 +9,14 @@ const User = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    first_name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    last_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // last_name: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -30,7 +30,7 @@ const User = sequelize.define(
   { sequelize, timestamps: true }
 );
 
-//sequelize.sync();
-User.sync({ alter: true });
+//User.sync({ alter: true });
+//User.sync({ force: false });
 
 module.exports = User;

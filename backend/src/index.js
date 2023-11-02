@@ -15,18 +15,18 @@ const secretKey = "asdfasdfxfvsdfasdgffsdfgsfa";
 app.use(cors());
 app.use(express.json());
 
-app
-  .use((req, res, next) => {
-    jwt.verify(req.body.token, secretKey, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(401).json({ message: "Unauthorized" });
-        return;
-      }
-      next();
-    });
-  })
-  .unless({ path: ["/register"] });
+// app
+//   .use((req, res, next) => {
+//     jwt.verify(req.body.token, secretKey, (err, result) => {
+//       if (err) {
+//         console.log(err);
+//         res.status(401).json({ message: "Unauthorized" });
+//         return;
+//       }
+//       next();
+//     });
+//   })
+//   .unless({ path: ["/register"] });
 
 app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);

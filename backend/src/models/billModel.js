@@ -28,7 +28,7 @@ const Bill = sequelize.define(
       allowNull: false,
     },
     monthly_same_day: {
-      type: DataTypes.BIT,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     start_date: {
@@ -75,6 +75,7 @@ const Bill = sequelize.define(
     ],
   },
   {
+    sequelize,
     timestamps: false,
   }
 );
@@ -96,6 +97,6 @@ Bill.belongsTo(Interval, {
   foreignKey: "interval_id",
 });
 
-Bill.sync({ alter: true });
-
+//Bill.sync({ alter: true });
+// Bill.sync({ force: false });
 module.exports = Bill;

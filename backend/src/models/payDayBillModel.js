@@ -46,13 +46,11 @@ const PayDayBill = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["bill_id", "paycheck_id"],
+        fields: ["bill_id", "payday_id"],
       },
     ],
   },
-  {
-    timestamps: false,
-  }
+  { sequelize, timestamps: false }
 );
 
 Bill.hasMany(PayDayBill, {
@@ -89,6 +87,6 @@ PayDayBill.belongsTo(Budget, {
   foreignKey: "budget_id",
 });
 
-PayDayBill.sync({ alter: true });
-
+//PayDayBill.sync({ alter: true });
+//PayDayBill.sync({ force: false });
 module.exports = PayDayBill;

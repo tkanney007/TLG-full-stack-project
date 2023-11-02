@@ -39,6 +39,7 @@ const BillDueDates = sequelize.define(
     ],
   },
   {
+    sequelize,
     timestamps: false,
   }
 );
@@ -61,6 +62,6 @@ BillDueDates.belongsTo(Bill, {
   foreignKey: "bill_id",
 });
 
-BillDueDates.sync({ alter: true });
-
-module.exports = Bill;
+//BillDueDates.sync({ alter: true });
+// BillDueDates.sync({ force: false });
+module.exports = BillDueDates;

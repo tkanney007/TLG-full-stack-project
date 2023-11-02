@@ -39,6 +39,7 @@ const Contributor = sequelize.define(
     ],
   },
   {
+    sequelize,
     timestamps: false,
   }
 );
@@ -52,6 +53,7 @@ Contributor.belongsTo(Budget, {
   foreignKey: "budget_id",
 });
 
-Contributor.sync({ alter: true });
+//Contributor.sync({ alter: true });
+//Contributor.sync({ force: false });
 
 module.exports = Contributor;
