@@ -27,9 +27,11 @@ const Interval = sequelize.define(
     },
   },
   {
+    sequelize,
     timestamps: false,
   }
 );
 
-Interval.sync({ alter: true });
+//Interval.sync({ alter: true });
+// Interval.sync({ force: false });
 module.exports = Interval;

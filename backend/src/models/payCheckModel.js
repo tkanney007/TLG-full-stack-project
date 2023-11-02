@@ -20,10 +20,6 @@ const PayCheck = sequelize.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    // end_pay_date: {
-    //   type: DataTypes.DATE,
-    //   allowNull: false,
-    // },
     budget_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -50,11 +46,12 @@ const PayCheck = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["pay_check_name", "budget_id", "contributor_id"],
+        fields: ["pay_check_name", "contributor_id"], // "budget_id",
       },
     ],
   },
   {
+    sequelize,
     timestamps: false,
   }
 );
@@ -85,6 +82,6 @@ PayCheck.belongsTo(Interval, {
   foreignKey: "interval_id",
 });
 
-PayCheck.sync({ alter: true });
-
+//PayCheck.sync({ alter: true });
+//PayCheck.sync({ force: false });
 module.exports = PayCheck;

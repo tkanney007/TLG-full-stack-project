@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 
 // DB Connection Configuration
-const sequelize = new Sequelize("easybills", "root", "Pa$$w0rd123!", {
+const sequelize = new Sequelize("easybills", "root", "P3rk1n3lm3r", {
   host: "localhost",
   dialect: "mysql",
 });

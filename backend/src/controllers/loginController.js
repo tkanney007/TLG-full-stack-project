@@ -2,17 +2,33 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 const Budget = require("../models/budgetModel");
+const {
+  throwError,
+  throwIf,
+  sendSuccess,
+  sendError,
+} = require("./errorHandling");
 
 const loginUser = async (req, res) => {
   try {
-    const loginResult = await userModel.findOne({
-      where: { email: req.body.email },
-      attributes: ["id", "first_name", "email", "password"],
-      include: {
-        model: Budget,
-        attributes: ["id", "budget_name"],
-      },
-    });
+    const loginResult = await userModel
+      .findOne({
+        where: { email: req.body.email },
+        attributes: [["id", "user_id"], "name", "email", "password"],
+        include: {
+          model: Budget,
+          attributes: ["id", "budget_name"],
+        },
+      })
+      .then(
+        throwIf(
+          (r) => !r,
+          401,
+          "not found",
+          "There was an issue while trying to retrieve the account."
+        ),
+        throwError(500, "sequelize error")
+      );
     if (!loginResult) {
       res.status(401).json({ message: "Email address not found." });
       return;
@@ -24,9 +40,7 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({
       message: "You have successfully logged in.",
-      id: loginResult.id,
-      first_name: loginResult.first_name,
-      email: loginResult.email,
+      loginResult,
     });
   } catch (error) {
     res.status(500).json({

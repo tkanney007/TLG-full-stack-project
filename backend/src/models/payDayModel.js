@@ -38,13 +38,6 @@ const PayDay = sequelize.define(
         key: "id",
       },
     },
-    // interval_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: "intervals",
-    //     key: "id",
-    //   },
-    // },
   },
   {
     indexes: [
@@ -55,6 +48,7 @@ const PayDay = sequelize.define(
     ],
   },
   {
+    sequelize,
     timestamps: false,
   }
 );
@@ -86,14 +80,7 @@ PayDay.belongsTo(PayCheck, {
   foreignKey: "paycheck_id",
 });
 
-// PayDay.hasOne(Interval, {
-//   foreignKey: "interval_id",
-// });
-
-// PayDay.belongsTo(Interval, {
-//   foreignKey: "interval_id",
-// });
-
-PayDay.sync({ alter: true });
+//PayDay.sync({ alter: true });
+//PayDay.sync({ force: false });
 
 module.exports = PayDay;
