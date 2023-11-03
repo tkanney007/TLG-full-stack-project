@@ -7,7 +7,6 @@ export default function CustomNavbar() {
   return (
     <Navbar
       fluid
-      rounded
       style={{ backgroundColor: "#141d46", height: "100px" }}
     >
       <Navbar.Brand>
@@ -25,15 +24,13 @@ export default function CustomNavbar() {
       </Navbar.Brand>
       <div className="flex md:order-2">
         <Link to="/login">
-          <Button gradientDuoTone="purpleToBlue">log in</Button>
+          <Button gradientDuoTone="purpleToBlue" className="flex">log in</Button>
         </Link>
       </div>
       <Navbar.Collapse>
-        <Navbar.Link href="/" active>
-          Home
-        </Navbar.Link>
-        <Navbar.Link href="#">Payday</Navbar.Link>
-        <Navbar.Link href="/bills">Bills</Navbar.Link>
+        <Navbar.Link href="/" active className="flex">Home</Navbar.Link>
+        <Navbar.Link href="#" active className="flex">Payday</Navbar.Link>
+        <Navbar.Link href="/bills" active className="flex">Bills</Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );
