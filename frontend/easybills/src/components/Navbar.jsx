@@ -14,7 +14,7 @@ export default function CustomNavbar() {
     <Navbar
       fluid
       rounded
-      style={{ backgroundColor: "#1B2845", height: "120px" }}
+      style={{ backgroundColor: "#1B2845", position: "relative" , minHeight: "10vh" }}
     >
       <Navbar.Brand>
         <Link to="/">
