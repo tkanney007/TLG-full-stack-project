@@ -7,9 +7,9 @@ const {
   deleteBill,
 } = require("../controllers/billController");
 
-router.get("/", getBillsByBudgetID);
+router.get("/:budget_id", getBillsByBudgetID);
 router.post("/", addBill);
 router.put("/", updateBill);
-router.delete("/", deleteBill);
+router.delete("/:bill_id", deleteBill);
 
 module.exports = router;

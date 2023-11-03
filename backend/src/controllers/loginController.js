@@ -18,7 +18,7 @@ const loginUser = async (req, res) => {
         attributes: [["id", "user_id"], "name", "email", "password"],
         include: {
           model: Budget,
-          attributes: ["id", "budget_name"],
+          attributes: [["id", "budget_id"], "budget_name"],
         },
       })
       .then((user) => {

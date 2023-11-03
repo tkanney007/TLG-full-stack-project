@@ -10,6 +10,6 @@ const {
 router.get("/:user_id", getBudgetsByUserID);
 router.post("/", addBudget);
 router.put("/", updateBudget);
-router.delete("/", deleteBudget);
+router.delete("/:budget_id", deleteBudget);
 
 module.exports = router;

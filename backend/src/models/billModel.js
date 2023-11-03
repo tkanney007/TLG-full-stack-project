@@ -32,7 +32,7 @@ const Bill = sequelize.define(
       allowNull: false,
     },
     start_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     // end_date: {
@@ -53,6 +53,7 @@ const Bill = sequelize.define(
     },
     budget_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "budgets",
         key: "id",
@@ -60,6 +61,7 @@ const Bill = sequelize.define(
     },
     interval_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "intervals",
         key: "id",

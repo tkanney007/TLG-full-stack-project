@@ -158,8 +158,42 @@ const updateBudget = async (req, res) => {
 };
 
 const deleteBudget = async (req, res) => {
-  try {
-    const result = await Budget.findByPk(req.body.budget_id).catch((error) => {
+  const result = await Budget.findByPk(req.params.budget_id).catch((error) => {
+    return res
+      .json({
+        success: false,
+        message: "An error occurred.",
+        error: error,
+      })
+      .status(500);
+  });
+  if (result == null) {
+    return res
+      .json({
+        success: false,
+        message:
+          "Cannot delete budget because it was not found with the given budget id.",
+      })
+      .status(404);
+  }
+  await Budget.destroy({ where: { id: req.params.budget_id } })
+    .then((deleteResult) => {
+      if (!deleteResult) {
+        return res
+          .json({
+            success: false,
+            message: "Unable to delete budget",
+          })
+          .status(204);
+      }
+      return res
+        .json({
+          message: `The following budget record has been deleted:`,
+          result,
+        })
+        .status(200);
+    })
+    .catch((error) => {
       return res
         .json({
           success: false,
@@ -168,27 +202,6 @@ const deleteBudget = async (req, res) => {
         })
         .status(500);
     });
-    if (!result.length) {
-      return res
-        .json({
-          success: false,
-          message:
-            "Cannot delete budget because it was not found with the given budget id.",
-        })
-        .status(404);
-    }
-    await Budget.destroy({ where: { id: req.body.budget_id } }).then();
-    return res.status(200).json({
-      message: `The following budget record has been deleted:`,
-      result,
-    });
-
-    return res.status(204).json({
-      message: "Couldn't delete budget record because it could not be found.",
-    });
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
 };
 
 module.exports = {
