@@ -7,6 +7,7 @@ const Bills = () => {
     backgroundColor: "#111A2C",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
     height: "90vh"
   };
