@@ -17,6 +17,7 @@ const BillDueDates = sequelize.define(
     },
     budget_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "budgets",
         key: "id",
@@ -24,6 +25,7 @@ const BillDueDates = sequelize.define(
     },
     bill_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "bills",
         key: "id",

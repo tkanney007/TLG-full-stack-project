@@ -8,7 +8,7 @@ const getBillsByBudgetID = async (req, res) => {
   try {
     const result = await Bill.findAll({
       where: {
-        budget_id: req.body.budget_id,
+        budget_id: req.params.budget_id,
       },
       attributes: [
         ["id", "bill_id"],
@@ -16,6 +16,7 @@ const getBillsByBudgetID = async (req, res) => {
         "description",
         "amt_due",
         "day_due",
+        "monthly_same_day",
         "start_date",
         "website",
         "website_login",
@@ -24,12 +25,26 @@ const getBillsByBudgetID = async (req, res) => {
         "interval_id",
       ],
     });
-    if (result) {
-      return res.status(200).json(result);
+    if (!result.length) {
+      return res.status(404).json({
+        success: true,
+        message: "No bills found for this budget.",
+      });
     }
-    return res.status(400).json({ message: "No bills found for this budget." });
+
+    return res.status(200).json({
+      success: true,
+      message: "Bills retrieved for budget provided.",
+      result,
+    });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res
+      .json({
+        success: false,
+        message: "An error occurred while fetching the bill record(s).",
+        error: error,
+      })
+      .status(500);
   }
 };
 
@@ -48,9 +63,10 @@ const addBill = async (req, res) => {
       budget_id: req.body.budget_id,
       interval_id: req.body.interval_id,
     });
+
     const billResult = await Bill.findOne({
       where: {
-        bill_name: req.body.pay_check_name,
+        bill_name: req.body.bill_name,
         budget_id: req.body.budget_id,
       },
       attributes: [
@@ -69,29 +85,60 @@ const addBill = async (req, res) => {
       ],
     });
 
-    if (billResult) {
-      if (!createBillDueDates(billResult)) {
-        await Bill.destroy({ where: { id: billResult.bill_id } });
-        return res.status(500).json({
-          message:
-            "The following bill record was added but has subsequently been deleted because bill due dates couldn't be created for it:",
-          billResult,
-        });
-      }
-      return res.status(200).json(billResult);
+    if (billResult == null) {
+      return res
+        .json({
+          success: true,
+          message: "Couldn't return added bill.",
+        })
+        .status(204);
     }
-    return res.status(204).json({ message: "Couldn't return added bill." });
+    const interval = await Interval.findOne({
+      where: { id: billResult.interval_id },
+      attributes: [
+        ["id", "interval_id"],
+        "interval_name",
+        "description",
+        "num_days",
+        "num_pays",
+      ],
+    });
+    console.log(billResult);
+    if (!createBillDueDates(billResult.dataValues, interval)) {
+      await Bill.destroy({ where: { id: billResult.bill_id } });
+      return res.status(500).json({
+        message:
+          "The following bill record was added but has subsequently been deleted because bill due dates couldn't be created for it:",
+        billResult,
+      });
+    }
+    return res
+      .json({
+        success: true,
+        message: "Bill successfully added.",
+        billResult,
+      })
+      .status(200);
   } catch (error) {
-    res.status(500).json({ error: error });
+    res
+      .json({
+        success: false,
+        message: "An error occurred when adding the bill record.",
+        error: error,
+      })
+      .status(500);
   }
 };
 
-const createBillDueDates = async (bill) => {
+const createBillDueDates = (bill, interval) => {
   try {
-    const interval = await Interval.findByPk(bill.interval_id);
-    if (interval) {
+    //const interval = await Interval.findByPk(bill.interval_id);
+    if (interval != null) {
       // create an array of billduedate objects that will be flushed to bill_due_dates table.
       //Load with the due date specified for bill object being added.
+      // console.log("**********************************", interval.num_days);
+      // return false;
+      moment.suppressDeprecationWarnings = true;
       let billDueDates = [
         {
           due_date: moment(bill.start_date).format("L"),
@@ -144,8 +191,10 @@ const createBillDueDates = async (bill) => {
       }
       console.log(billDueDates);
       //Create all the paydays in the payday array
-      await BillDueDates.bulkCreate(billDueDates);
-      return true;
+      const insertResult = BillDueDates.bulkCreate(billDueDates).then(() => {
+        return true;
+      });
+      return insertResult;
     }
   } catch (error) {
     console.log(
@@ -165,6 +214,7 @@ const updateBill = async (req, res) => {
         "description",
         "amt_due",
         "day_due",
+        "monthly_same_day",
         "start_date",
         "website",
         "website_login",
@@ -174,88 +224,48 @@ const updateBill = async (req, res) => {
       ],
     });
     // Check if we found a bill record
-    if (billResult) {
-      // If we found a bill issue the update sent in request
-      await Bill.update(
-        {
-          bill_name: req.body.bill_name,
-          description: req.body.description,
-          amt_due: req.body.amt_due,
-          day_due: req.body.day_due,
-          monthly_same_day: true, // need to change this but for times sake just defaulting to true req.body.monthly_same_day,
-          start_date: req.body.start_date,
-          website: req.body.website,
-          website_login: req.body.website_login,
-          active: req.body.active,
-          budget_id: req.body.budget_id,
-          interval_id: req.body.interval_id,
-        },
-        { where: { id: billResult.bill_id, budget_id: billResult.budget_id } }
-      );
-      // Get the updated bill
-      const billUpdated = await Bill.findByPk(billResult.bill_id, {
-        attributes: [
-          ["id", "bill_id"],
-          "bill_name",
-          "description",
-          "amt_due",
-          "day_due",
-          "start_date",
-          "website",
-          "website_login",
-          "active",
-          "budget_id",
-          "interval_id",
-        ],
-      });
-      // Check if the bill start date, day_due, amt_due changed
-      if (
-        moment(billResult.start_pay_date).format("L") !==
-          moment(billUpdated.start_pay_date).format("L") ||
-        billResult.day_due !== billUpdated.day_due ||
-        billResult.amt_due !== billUpdated.amt_due
-      ) {
-        // If the bill start date, day_due, amt_due changed we need to delete all
-        // the child bill due dates
-        // and then recreate them with the new properties.
-        await BillDueDates.destroy({
-          where: {
-            bill_id: billResult.bill_id,
-            budget_id: billResult.budget_id,
-          },
-        });
-        //Create all the bills with the new properties
-        if (!createBillDueDates(billUpdated)) {
-          // If the new bill can't be created delete the bill and make the user recreate it.
-          // ****This should be reevaluated for a better way in the future****
-          await Bill.destroy({
-            where: { id: billResult.bill_id, budget_id: billResult.budget_id },
-          });
-          return res.status(500).json({
-            message:
-              "The following bill record was updated but has subsequently been deleted because bill due dates couldn't be created/updated for it after the bill updates. Please re-add the bill.:",
-            billResult,
-          });
-        }
-      }
-      // Return the updated record
-      return res.status(200).json(billUpdated);
+    console.log(billResult);
+    console.log("**************", billResult.dataValues.bill_id);
+    if (billResult == null) {
+      return res
+        .json({
+          success: false,
+          message:
+            "Cannot update bill because it was not found with the given bill id.",
+        })
+        .status(404);
     }
-    return res.status(204).json({ message: "Couldn't update bill." });
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-};
-
-const deleteBill = async (req, res) => {
-  try {
-    const billResult = await Bill.findByPk(req.body.bill_id, {
+    // If we found a bill issue the update sent in request
+    await Bill.update(
+      {
+        bill_name: req.body.bill_name,
+        description: req.body.description,
+        amt_due: req.body.amt_due,
+        day_due: req.body.day_due,
+        monthly_same_day: true, // need to change this but for times sake just defaulting to true req.body.monthly_same_day,
+        start_date: req.body.start_date,
+        website: req.body.website,
+        website_login: req.body.website_login,
+        active: req.body.active,
+        budget_id: req.body.budget_id,
+        interval_id: req.body.interval_id,
+      },
+      {
+        where: {
+          id: billResult.dataValues.bill_id,
+          budget_id: billResult.dataValues.budget_id,
+        },
+      }
+    );
+    // Get the updated bill
+    const billUpdated = await Bill.findByPk(billResult.dataValues.bill_id, {
       attributes: [
         ["id", "bill_id"],
         "bill_name",
         "description",
         "amt_due",
         "day_due",
+        "monthly_same_day",
         "start_date",
         "website",
         "website_login",
@@ -264,20 +274,136 @@ const deleteBill = async (req, res) => {
         "interval_id",
       ],
     });
-    if (billResult) {
-      await Bill.destroy({
-        where: { id: billResult.bill_id, budget_id: billResult.budget_id },
-      });
-      return res.status(200).json({
-        message: `The following bill record has been deleted:`,
-        billResult,
-      });
+
+    if (billUpdated == null) {
+      return res
+        .json({
+          success: false,
+          message:
+            "Cannot return bill after it was updated. Because of this the bill due date records have not been updated. Please try update again.",
+        })
+        .status(404);
     }
-    return res.status(204).json({
-      message: "Couldn't delete bill record because it could not be found.",
-    });
+    // Check if the bill start date, day_due, amt_due changed
+    if (
+      moment(billResult.dataValues.start_pay_date).format("L") !==
+        moment(billUpdated.dataValues.start_pay_date).format("L") ||
+      billResult.dataValues.day_due !== billUpdated.dataValues.day_due ||
+      billResult.dataValues.amt_due !== billUpdated.dataValues.amt_due
+    ) {
+      // If the bill start date, day_due, amt_due changed we need to delete all
+      // the child bill due dates
+      // and then recreate them with the new properties.
+
+      await BillDueDates.destroy({
+        where: {
+          bill_id: billResult.dataValues.bill_id,
+          budget_id: billResult.dataValues.budget_id,
+        },
+      });
+
+      const interval = await Interval.findOne({
+        where: { id: billResult.dataValues.interval_id },
+        attributes: [
+          ["id", "interval_id"],
+          "interval_name",
+          "description",
+          "num_days",
+          "num_pays",
+        ],
+      });
+      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^", billUpdated.dataValues);
+      //Create all the bills with the new properties
+      if (!createBillDueDates(billUpdated.dataValues, interval)) {
+        // If the new bill can't be created delete the bill and make the user recreate it.
+        // ****This should be reevaluated for a better way in the future****
+        await Bill.destroy({
+          where: {
+            id: billResult.dataValues.bill_id,
+            budget_id: billResult.dataValues.budget_id,
+          },
+        });
+        return res.status(500).json({
+          success: false,
+          message:
+            "The following bill record was updated but has subsequently been deleted because bill due dates couldn't be created/updated for it after the bill updates. Please re-add the bill.",
+          billResult,
+        });
+      }
+    }
+    // Return the updated record
+    console.log("HHHERREEEEEREEREREREREREEREREREREREE");
+    return res
+      .json({
+        success: true,
+        message: "Bill successfully updated.",
+        billUpdated,
+      })
+      .status(200);
   } catch (error) {
-    res.status(500).json({ error: error });
+    res
+      .json({
+        success: false,
+        message: "An error occurred when updating the Bill record.",
+        error: error,
+      })
+      .status(500);
+  }
+};
+
+const deleteBill = async (req, res) => {
+  try {
+    //Find bill to delete to make sure it exists
+    const billResult = await Bill.findByPk(req.params.bill_id, {
+      attributes: [
+        ["id", "bill_id"],
+        "bill_name",
+        "description",
+        "amt_due",
+        "day_due",
+        "monthly_same_day",
+        "start_date",
+        "website",
+        "website_login",
+        "active",
+        "budget_id",
+        "interval_id",
+      ],
+    });
+    console.log(billResult);
+    //Check if the bill was returned
+    if (billResult == null) {
+      //Bill not found return success false and message
+      return res
+        .json({
+          success: false,
+          message: "Couldn't delete bill record because it could not be found.",
+        })
+        .status(404);
+    }
+    // Bill found so go ahead and delete it
+    await Bill.destroy({
+      where: {
+        id: billResult.dataValues.bill_id,
+        budget_id: billResult.dataValues.budget_id,
+      },
+    });
+    //return success true and delete message with the record that was deleted
+    return res
+      .json({
+        success: true,
+        message: "Bill successfully deleted.",
+        billResult,
+      })
+      .status(200);
+  } catch (error) {
+    res
+      .json({
+        success: false,
+        message: "An error occurred when deleting the bill record.",
+        error: error,
+      })
+      .status(500);
   }
 };
 
