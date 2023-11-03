@@ -105,7 +105,7 @@ const addBill = async (req, res) => {
     });
     console.log(billResult);
     if (!createBillDueDates(billResult.dataValues, interval)) {
-      await Bill.destroy({ where: { id: billResult.bill_id } });
+      await Bill.destroy({ where: { id: billResult.dataValues.bill_id } });
       return res.status(500).json({
         message:
           "The following bill record was added but has subsequently been deleted because bill due dates couldn't be created for it:",
@@ -281,9 +281,11 @@ const updateBill = async (req, res) => {
           success: false,
           message:
             "Cannot return bill after it was updated. Because of this the bill due date records have not been updated. Please try update again.",
+          billResult,
         })
         .status(404);
     }
+    moment.suppressDeprecationWarnings = true;
     // Check if the bill start date, day_due, amt_due changed
     if (
       moment(billResult.dataValues.start_pay_date).format("L") !==

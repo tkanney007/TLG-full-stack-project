@@ -17,7 +17,11 @@ const PayCheck = sequelize.define(
       allowNull: false,
     },
     start_pay_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    pay_amount_est: {
+      type: DataTypes.DECIMAL(14, 2),
       allowNull: false,
     },
     budget_id: {

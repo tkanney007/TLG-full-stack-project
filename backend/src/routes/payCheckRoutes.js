@@ -7,9 +7,9 @@ const {
   deletePayCheck,
 } = require("../controllers/payCheckController");
 
-router.get("/", getPayCheckByContribID);
+router.get("/:budget_id/:contributor_id", getPayCheckByContribID);
 router.post("/", addPayCheck);
 router.put("/", updatePayCheck);
-router.delete("/", deletePayCheck);
+router.delete("/:pay_check_id", deletePayCheck);
 
 module.exports = router;
