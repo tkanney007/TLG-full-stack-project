@@ -19,6 +19,7 @@ const PayDay = sequelize.define(
     },
     budget_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "budgets",
         key: "id",
@@ -26,6 +27,7 @@ const PayDay = sequelize.define(
     },
     contributor_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "contributors",
         key: "id",
@@ -33,6 +35,7 @@ const PayDay = sequelize.define(
     },
     paycheck_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "paychecks",
         key: "id",

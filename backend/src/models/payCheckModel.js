@@ -22,6 +22,7 @@ const PayCheck = sequelize.define(
     },
     budget_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "budgets",
         key: "id",
@@ -29,6 +30,7 @@ const PayCheck = sequelize.define(
     },
     contributor_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "contributors",
         key: "id",
@@ -36,6 +38,7 @@ const PayCheck = sequelize.define(
     },
     interval_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "intervals",
         key: "id",

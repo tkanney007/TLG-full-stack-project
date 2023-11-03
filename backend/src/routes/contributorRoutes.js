@@ -7,9 +7,9 @@ const {
   deleteContributor,
 } = require("../controllers/contributorController");
 
-router.get("/", getContribByBudgetID);
+router.get("/:budget_id", getContribByBudgetID);
 router.post("/", addContributor);
 router.put("/", updateContributor);
-router.delete("/", deleteContributor);
+router.delete("/:contributor_id", deleteContributor);
 
 module.exports = router;

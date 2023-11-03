@@ -24,6 +24,7 @@ const Contributor = sequelize.define(
     },
     budget_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: "budgets",
         key: "id",
@@ -53,7 +54,7 @@ Contributor.belongsTo(Budget, {
   foreignKey: "budget_id",
 });
 
-//Contributor.sync({ alter: true });
+// Contributor.sync({ alter: true });
 //Contributor.sync({ force: false });
 
 module.exports = Contributor;
