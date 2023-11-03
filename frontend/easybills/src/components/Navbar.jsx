@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { Navbar, Button } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 export default function CustomNavbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <Navbar
       fluid
@@ -31,11 +37,16 @@ export default function CustomNavbar() {
           <Button color="blue">log in</Button>
         </Link>
       </div>
-      <Navbar.Collapse>
+      <div className="md:hidden">
+        <Button onClick={toggleMenu} color="white">
+          &#9776; 
+        </Button>
+      </div>
+      <Navbar.Collapse className={isMenuOpen ? 'block' : 'hidden'}>
         <Navbar.Link href="/" active style={{ color: "white" }}>
           Home
         </Navbar.Link>
-        <Navbar.Link href="#" style={{ color: "white" }}>
+        <Navbar.Link href="/payday" style={{ color: "white" }}>
           Payday
         </Navbar.Link>
         <Navbar.Link href="/bills" style={{ color: "white" }}>
