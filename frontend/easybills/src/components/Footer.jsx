@@ -1,6 +1,6 @@
 import React from "react";
 import { Footer } from "flowbite-react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpg";
 import { Link } from "react-router-dom";
 import {
   BsDribbble,

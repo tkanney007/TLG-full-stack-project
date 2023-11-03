@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpg";
 import { Navbar, Button } from "flowbite-react";
 import { Link } from "react-router-dom";
 
@@ -46,8 +46,8 @@ export default function CustomNavbar() {
         <Navbar.Link href="/" active style={{ color: "white" }}>
           Home
         </Navbar.Link>
-        <Navbar.Link href="/payday" style={{ color: "white" }}>
-          Payday
+        <Navbar.Link href="/register" style={{ color: "white" }}>
+          Register
         </Navbar.Link>
         <Navbar.Link href="/bills" style={{ color: "white" }}>
           Bills
