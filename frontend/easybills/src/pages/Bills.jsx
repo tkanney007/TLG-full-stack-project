@@ -4,9 +4,12 @@ import Pagination from "../components/Pagination";
 
 const Bills = () => {
   const containerStyle = {
+    backgroundColor: "#111A2C",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
+    height: "90vh"
   };
 
   return (
