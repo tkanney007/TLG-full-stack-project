@@ -19,7 +19,7 @@ const footerStyle = {
 
 export default function FooterCustom() {
   return (
-    <div style={{ position: "relative", minHeight: "100vh" }}>
+    <div style={{ position: "relative", minHeight: "75vh" }}>
       <Footer container style={footerStyle}>
         <div className="w-full">
           <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">

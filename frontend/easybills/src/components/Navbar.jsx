@@ -38,7 +38,7 @@ export default function CustomNavbar() {
         </Link>
       </div>
       <div className="md:hidden">
-        <Button onClick={toggleMenu} color="white">
+        <Button onClick={toggleMenu} style= {{color: "white"}}>
           &#9776; 
         </Button>
       </div>
