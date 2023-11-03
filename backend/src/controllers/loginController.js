@@ -8,45 +8,45 @@ const {
   sendSuccess,
   sendError,
 } = require("./errorHandling");
+const secretKey = "asdfasdfxfvsdfasdgffsdfgsfa";
 
 const loginUser = async (req, res) => {
   try {
-    const loginResult = await userModel
+    await userModel
       .findOne({
         where: { email: req.body.email },
         attributes: [["id", "user_id"], "name", "email", "password"],
         include: {
           model: Budget,
-          attributes: ["id", "budget_name"],
+          attributes: [["id", "budget_id"], "budget_name"],
         },
       })
-      .then(
-        throwIf(
-          (r) => !r,
-          401,
-          "not found",
-          "There was an issue while trying to retrieve the account."
-        ),
-        throwError(500, "sequelize error")
-      );
-    if (!loginResult) {
-      res.status(401).json({ message: "Email address not found." });
-      return;
-    }
-    if (!bcrypt.compare(req.body.password, loginResult.password)) {
-      res.status(401).json({ message: "Password incorrect." });
-      return;
-    }
-
-    res.status(200).json({
-      message: "You have successfully logged in.",
-      loginResult,
-    });
+      .then((user) => {
+        //If user account doesn't exist them return status 400
+        if (!user)
+          return res.status(400).json({ message: "Email address not found." });
+        //if user found with email address then compare password
+        bcrypt.compare(req.body.password, user.password, (err, result) => {
+          if (err) {
+            throw err;
+          }
+          if (result) {
+            let token = jwt.sign(user.email, secretKey);
+            res.status(200).json({
+              success: true,
+              message: "You have successfully logged in.",
+              token,
+              user,
+            });
+          } else {
+            res
+              .status(401)
+              .json({ success: false, message: "Password incorrect." });
+          }
+        });
+      });
   } catch (error) {
-    res.status(500).json({
-      message:
-        "An error occurred while trying to log you in. Please try again.",
-    });
+    sendError(res, 500)(error);
   }
 };
 
