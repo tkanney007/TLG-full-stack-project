@@ -1,39 +1,57 @@
-import React from "react";
-import logo from "../assets/logo.jpg";
+import React, { useState } from "react";
+import logo from "../assets/logo.png";
 import { Navbar, Button } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 export default function CustomNavbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <Navbar
       fluid
       rounded
-      style={{ backgroundColor: "#141d46", height: "100px" }}
+      style={{ backgroundColor: "#1B2845", height: "120px" }}
     >
       <Navbar.Brand>
         <Link to="/">
           <img
             src={logo}
-            style={{ height: "80px", width: "auto" }}
+            style={{ height: "100px", width: "auto" }}
             className="mr-3 h-6 sm:h-9"
             alt="Logo"
           />
         </Link>
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+        <span
+          className="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+          style={{ color: "white" }}
+        >
           Easy Bills
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
         <Link to="/login">
-          <Button gradientDuoTone="purpleToBlue">log in</Button>
+          <Button color="blue">log in</Button>
         </Link>
       </div>
-      <Navbar.Collapse>
-        <Navbar.Link href="/" active>
+      <div className="md:hidden">
+        <Button onClick={toggleMenu} style= {{color: "white"}}>
+          &#9776; 
+        </Button>
+      </div>
+      <Navbar.Collapse className={isMenuOpen ? 'block' : 'hidden'}>
+        <Navbar.Link href="/" active style={{ color: "white" }}>
           Home
         </Navbar.Link>
-        <Navbar.Link href="#">Payday</Navbar.Link>
-        <Navbar.Link href="/bills">Bills</Navbar.Link>
+        <Navbar.Link href="/payday" style={{ color: "white" }}>
+          Payday
+        </Navbar.Link>
+        <Navbar.Link href="/bills" style={{ color: "white" }}>
+          Bills
+        </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );
