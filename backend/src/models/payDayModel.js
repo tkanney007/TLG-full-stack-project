@@ -17,6 +17,10 @@ const PayDay = sequelize.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
+    pay_amount_act: {
+      type: DataTypes.DECIMAL(14, 2),
+      allowNull: false,
+    },
     budget_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -33,7 +37,7 @@ const PayDay = sequelize.define(
         key: "id",
       },
     },
-    paycheck_id: {
+    pay_check_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -75,12 +79,12 @@ PayDay.belongsTo(Budget, {
 });
 
 PayCheck.hasMany(PayDay, {
-  foreignKey: "paycheck_id",
+  foreignKey: "pay_check_id",
   onDelete: "CASCADE",
 });
 
 PayDay.belongsTo(PayCheck, {
-  foreignKey: "paycheck_id",
+  foreignKey: "pay_check_id",
 });
 
 //PayDay.sync({ alter: true });
