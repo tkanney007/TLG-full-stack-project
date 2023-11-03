@@ -34,7 +34,7 @@ export default function CustomNavbar() {
       </Navbar.Brand>
       <div className="flex md:order-2">
         <Link to="/login">
-          <Button color="blue">log in</Button>
+<Button color="blue">log in</Button>
         </Link>
       </div>
       <div className="md:hidden">
