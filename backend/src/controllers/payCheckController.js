@@ -324,7 +324,7 @@ const deletePayCheck = async (req, res) => {
         .status(404);
     }
 
-    await Paycheck.destroy({
+    await PayCheck.destroy({
       where: { id: payCheckResult.dataValues.pay_check_id },
     });
 

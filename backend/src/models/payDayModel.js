@@ -50,7 +50,7 @@ const PayDay = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["pay_date", "paycheck_id"],
+        fields: ["pay_date", "pay_check_id"],
       },
     ],
   },
@@ -88,6 +88,6 @@ PayDay.belongsTo(PayCheck, {
 });
 
 //PayDay.sync({ alter: true });
-//PayDay.sync({ force: false });
+//PayDay.sync({ force: true });
 
 module.exports = PayDay;

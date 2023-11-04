@@ -92,5 +92,5 @@ PayDayBill.belongsTo(Budget, {
 });
 
 //PayDayBill.sync({ alter: true });
-//PayDayBill.sync({ force: false });
+//PayDayBill.sync({ force: true });
 module.exports = PayDayBill;

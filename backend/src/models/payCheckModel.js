@@ -90,5 +90,5 @@ PayCheck.belongsTo(Interval, {
 });
 
 //PayCheck.sync({ alter: true });
-//PayCheck.sync({ force: false });
+//PayCheck.sync({ force: true });
 module.exports = PayCheck;
