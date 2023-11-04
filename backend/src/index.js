@@ -10,6 +10,7 @@ const budgetRoutes = require("./routes/budgetRoutes");
 const contributorRoutes = require("./routes/contributorRoutes");
 const payCheckRoutes = require("./routes/payCheckRoutes");
 const billRoutes = require("./routes/billRoutes");
+const { sequelize } = require("./models/conn");
 const secretKey = "asdfasdfxfvsdfasdgffsdfgsfa";
 
 app.use(cors());
@@ -34,6 +35,8 @@ app.use("/budgets", budgetRoutes);
 app.use("/contributors", contributorRoutes);
 app.use("/paychecks", payCheckRoutes);
 app.use("/bills", billRoutes);
+
+//sequelize.sync();
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}...`);
